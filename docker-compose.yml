@@ -1,0 +1,111 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    environment:
+      - COMPOSER_HOME=/app/composer
+      - COMPOSER_CACHE_DIR=/app/composer/cache
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MONGO_DB_CONNECTION=mongodb
+      - MONGO_DB_HOST=mongodb
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_DATABASE=${MONGO_DB_DATABASE}
+      - MONGO_DB_USERNAME=${MONGO_DB_USERNAME}
+      - MONGO_DB_PASSWORD=${MONGO_DB_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REVERB_HOST=reverb
+      - REVERB_PORT=3000
+    volumes:
+      - ./app:/app
+      - ./docker-compose.yml:/app/docker-compose.yml
+      - ./docker-compose.override.yml:/app/docker-compose.override.yml
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - mongodb
+      - redis
+      - reverb
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+
+  mongodb:
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_DATABASE}
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
+
+  redis:
+    image: redis:7.0
+    restart: always
+
+  reverb:
+    image: reverb:latest
+    environment:
+      - REVERB_HOST=0.0.0.0
+      - REVERB_PORT=3000
+    ports:
+      - "3000:3000"
+    restart: always
+
+  queue-worker:
+    build: .
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MONGO_DB_CONNECTION=mongodb
+      - MONGO_DB_HOST=mongodb
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_DATABASE=${MONGO_DB_DATABASE}
+      - MONGO_DB_USERNAME=${MONGO_DB_USERNAME}
+      - MONGO_DB_PASSWORD=${MONGO_DB_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REVERB_HOST=reverb
+      - REVERB_PORT=3000
+    volumes:
+      - ./app:/app
+      - ./docker-compose.yml:/app/docker-compose.yml
+      - ./docker-compose.override.yml:/app/docker-compose.override.yml
+    command: "php artisan horizon"
+    depends_on:
+      - mysql
+      - mongodb
+      - redis
+      - reverb
+    restart: always
+
+volumes:
+  mysql-data:
+  mongodb-data:

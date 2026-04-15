@@ -1,0 +1,1 @@
+// No PHP code is required for this Vue.js component
