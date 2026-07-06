@@ -71,6 +71,13 @@ Route::post('/chats', [ChatController::class, 'store']);
 Route::put('/chats/{id}', [ChatController::class, 'update']);
 Route::delete('/chats/{id}', [ChatController::class, 'destroy']);
 
+// Meeting Routes
+Route::get('/meetings', [\App\Http\Controllers\MeetingController::class, 'index']);
+Route::get('/meetings/{meeting}', [\App\Http\Controllers\MeetingController::class, 'show']);
+Route::post('/meetings', [\App\Http\Controllers\MeetingController::class, 'store']);
+Route::put('/meetings/{meeting}', [\App\Http\Controllers\MeetingController::class, 'update']);
+Route::delete('/meetings/{meeting}', [\App\Http\Controllers\MeetingController::class, 'destroy']);
+
 // AI Routes
 Route::get('/ai/lead-scoring', [AIController::class, 'leadScoring']);
 Route::get('/ai/sentiment-analysis', [AIController::class, 'sentimentAnalysis']);
