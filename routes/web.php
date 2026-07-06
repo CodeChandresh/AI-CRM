@@ -36,6 +36,10 @@ Route::group(['middleware' => 'inertia'], function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
 
+        Route::get('/meetings', function () {
+            return Inertia::render('Meetings/Index');
+        })->name('meetings');
+
         // Role-based route groups
         Route::group(['middleware' => 'role:admin'], function () {
             Route::get('/admin/dashboard', function () {
