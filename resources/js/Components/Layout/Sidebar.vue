@@ -42,6 +42,11 @@ export default {
           icon: 'heroicon-o-home'
         },
         {
+          label: 'Meetings',
+          href: '/meetings',
+          icon: 'heroicon-o-calendar'
+        },
+        {
           label: 'Leads',
           href: '/leads',
           icon: 'heroicon-o-chart-bar',
