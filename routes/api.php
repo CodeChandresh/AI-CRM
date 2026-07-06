@@ -82,6 +82,7 @@ Route::delete('/meetings/{meeting}', [\App\Http\Controllers\MeetingController::c
 Route::get('/ai/lead-scoring', [AIController::class, 'leadScoring']);
 Route::get('/ai/sentiment-analysis', [AIController::class, 'sentimentAnalysis']);
 Route::get('/ai/churn-prediction', [AIController::class, 'churnPrediction']);
+Route::get('/ai/sales-forecasting', [\App\Http\Controllers\SalesForecastController::class, 'getForecast']);
 
 // Churn Routes
 Route::get('/churn', [ChurnController::class, 'index']);
