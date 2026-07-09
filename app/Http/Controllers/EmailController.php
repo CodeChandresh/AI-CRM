@@ -174,9 +174,9 @@ class EmailController extends Controller
         }
 
         $leads = $campaign->leads;
+        $email = Email::find($campaign->email_id);
 
         foreach ($leads as $lead) {
-            $email = Email::find($campaign->email_id);
             $this->sendEmail($lead->id, $email->id);
         }
 
