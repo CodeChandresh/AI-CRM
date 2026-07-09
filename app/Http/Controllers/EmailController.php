@@ -7,18 +7,7 @@ use App\Models\Lead;
 use App\Models\EmailCampaign;
 use App\Models\EmailLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use App\Jobs\SendEmailJob;
-use App\Jobs\SendEmailCampaignJob;
-use App\Notifications\SendEmailNotification;
 use OpenAIApi\Client;
-use Pusher\Pusher;
 
 class EmailController extends Controller
 {
