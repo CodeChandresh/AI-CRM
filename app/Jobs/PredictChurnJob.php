@@ -32,7 +32,7 @@ class PredictChurnJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($segmentId, $customerId)
+    public function __construct($segmentId, $customerId = null)
     {
         $this->segmentId = $segmentId;
         $this->customerId = $customerId;
@@ -45,32 +45,47 @@ class PredictChurnJob implements ShouldQueue
      */
     public function handle()
     {
+        // If a specific customer ID is not provided, dispatch jobs for all customers in the segment
+        if (is_null($this->customerId)) {
+            $customers = Customer::where('segment_id', $this->segmentId)->get(['id']);
+
+            foreach ($customers as $customer) {
+                self::dispatch($this->segmentId, $customer->id);
+            }
+            return;
+        }
+
+        // Process a specific customer
+        $customer = Customer::find($this->customerId);
+
+        if (!$customer) {
+            return;
+        }
+
         // Get the customer segment
         $segment = Segment::find($this->segmentId);
 
-        // Get the customers in the segment
-        $customers = Customer::where('segment_id', $this->segmentId)->get();
-
-        // Process each customer
-        foreach ($customers as $customer) {
-            // Get the customer data
-            $customerData = $customer->getData();
-
-            // Make a prediction using the OpenAI API
-            $openai = new OpenAI('YOUR_API_KEY');
-            $response = $openai->predict('text-classification', $customerData);
-
-            // Get the prediction result
-            $prediction = $response->data->predictions[0];
-
-            // Create a new churn prediction
-            $churnPrediction = new ChurnPrediction();
-            $churnPrediction->customer_id = $customer->id;
-            $churnPrediction->segment_id = $segment->id;
-            $churnPrediction->prediction = $prediction->label;
-            $churnPrediction->confidence = $prediction->score;
-            $churnPrediction->save();
+        if (!$segment) {
+            return;
         }
+
+        // Get the customer data
+        $customerData = $customer->getData();
+
+        // Make a prediction using the OpenAI API
+        $openai = new OpenAI('YOUR_API_KEY');
+        $response = $openai->predict('text-classification', $customerData);
+
+        // Get the prediction result
+        $prediction = $response->data->predictions[0];
+
+        // Create a new churn prediction
+        $churnPrediction = new ChurnPrediction();
+        $churnPrediction->customer_id = $customer->id;
+        $churnPrediction->segment_id = $segment->id;
+        $churnPrediction->prediction = $prediction->label;
+        $churnPrediction->confidence = $prediction->score;
+        $churnPrediction->save();
     }
 
     /**
