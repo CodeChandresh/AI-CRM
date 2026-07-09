@@ -32,9 +32,7 @@ Route::group(['middleware' => 'inertia'], function () {
 
     // Authenticated routes
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/dashboard', function () {
-            return Inertia::render('Dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/meetings', function () {
             return Inertia::render('Meetings/Index');
