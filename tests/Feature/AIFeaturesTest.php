@@ -95,4 +95,27 @@ class AIFeaturesTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['message' => 'Email drafted successfully']);
     }
+
+    /**
+     * @test
+     */
+    public function it_prevents_path_traversal_in_draft_email_template_id()
+    {
+        Queue::fake();
+        Storage::fake('public');
+
+        // We try to pass an array or a string that could bypass standard integer validation
+        // depending on how Laravel treats it, but our explicit cast to int should neutralize it.
+        $response = $this->actingAs($this->user)->postJson('/api/ai/draft', [
+            'lead_id' => $this->lead->id,
+            'template_id' => '1/../../../../etc/passwd',
+        ]);
+
+        // Validation might fail first, which gives 422. If validation passes (e.g. because of loose rules),
+        // we want to ensure it fails safely. It will either fail validation (422) or fail because the file
+        // 1.txt is not found, returning 404 (or 200 if 1.txt exists, but it won't traverse).
+        // Since we didn't create templates/1.txt in this test, and the path traversal string
+        // '1/../../../../etc/passwd' cast to (int) evaluates to 1, we expect a 404 (Lead or template not found).
+        $response->assertStatus(422); // Validation requires integer
+    }
 }
