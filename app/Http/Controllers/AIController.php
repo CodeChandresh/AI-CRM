@@ -60,8 +60,9 @@ class AIController extends Controller
             'template_id' => 'required|integer',
         ]);
 
-        $lead = Lead::find($request->input('lead_id'));
-        $template = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix() . '/templates/' . $request->input('template_id') . '.txt';
+        $lead = Lead::find((int) $request->input('lead_id'));
+        $templateId = (int) $request->input('template_id');
+        $template = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix() . '/templates/' . $templateId . '.txt';
 
         if (!$lead || !$template) {
             return response()->json(['error' => 'Lead or template not found'], 404);
