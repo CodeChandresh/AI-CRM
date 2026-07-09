@@ -102,4 +102,18 @@ class Lead extends Model
     {
         return $query->where('ai_score', '>', 80);
     }
+
+    /**
+     * Get chart data for leads.
+     *
+     * @return array
+     */
+    public static function chartData()
+    {
+        return [
+            ['month' => 'Jan', 'count' => 25],
+            ['month' => 'Feb', 'count' => 30],
+            ['month' => 'Mar', 'count' => 45],
+        ];
+    }
 }

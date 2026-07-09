@@ -64,7 +64,7 @@ class DashboardController extends Controller
     private function getAiInsights()
     {
         // Initialize the OpenAI client
-        $client = new Client();
+        $client = app(\OpenAI\Client::class);
 
         // Get the lead scoring insights
         $leadScoringInsights = $client->leadScoring()->getInsights();
