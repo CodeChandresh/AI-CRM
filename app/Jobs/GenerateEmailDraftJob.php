@@ -75,7 +75,7 @@ class GenerateEmailDraftJob implements ShouldQueue
     {
         try {
             // Initialize the OpenAI client
-            $client = new Client('YOUR_OPENAI_API_KEY');
+            $client = new Client(env('OPENAI_API_KEY'));
 
             // Get the lead's conversation history
             $conversationHistory = $this->lead->conversationHistory;
