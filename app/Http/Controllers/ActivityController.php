@@ -97,7 +97,12 @@ class ActivityController extends Controller
         }
 
         // Pusher Notification
-        $pusher = new Pusher('YOUR_PUSHER_APP_ID', 'YOUR_PUSHER_APP_KEY', 'YOUR_PUSHER_APP_SECRET');
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            ['cluster' => env('PUSHER_APP_CLUSTER', 'mt1')]
+        );
         $pusher->trigger('activity-channel', 'activity-created', [
             'activity' => $activity,
         ]);
