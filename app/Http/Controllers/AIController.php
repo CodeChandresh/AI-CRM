@@ -5,18 +5,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lead;
-use App\Models\Contact;
-use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use OpenAIApi\Client;
-use Pusher\Pusher;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\SendEmailJob;
 use App\Jobs\AnalyzeSentimentJob;
 use App\Jobs\ScoreLeadJob;
