@@ -143,7 +143,7 @@ class EmailController extends Controller
             return back()->withErrors(['lead_id' => 'Lead or email not found']);
         }
 
-        $client = new Client('YOUR_OPENAI_API_KEY');
+        $client = new Client(env('OPENAI_API_KEY'));
         $response = $client->createEmail($email->subject, $email->body);
 
         if ($response->getStatusCode() !== 200) {
