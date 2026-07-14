@@ -9,16 +9,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\RedisTransaction;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Zip;
-use Illuminate\Support\Facades\Http;
 use OpenAIApi\OpenAI;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class PredictChurnJob implements ShouldQueue
 {
